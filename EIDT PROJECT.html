@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Body Parts Learning Game</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg,#4facfe,#00f2fe);
+}
+
+.container{
+    text-align:center;
+    width:90%;
+    max-width:500px;
+}
+
+h1{
+    color:white;
+    margin-bottom:10px;
+}
+
+#score{
+    color:white;
+    font-size:22px;
+    margin-bottom:15px;
+    font-weight:600;
+}
+
+.progress{
+    width:100%;
+    height:18px;
+    background:white;
+    border-radius:20px;
+    overflow:hidden;
+    margin-bottom:20px;
+}
+
+#bar{
+    height:100%;
+    width:0%;
+    background:limegreen;
+    transition:.5s;
+}
+
+.card{
+    width:100%;
+    height:470px;
+    perspective:1000px;
+    cursor:pointer;
+}
+
+.card-inner{
+    width:100%;
+    height:100%;
+    position:relative;
+    transform-style:preserve-3d;
+    transition:transform .8s;
+}
+
+.card.flip .card-inner{
+    transform:rotateY(180deg);
+}
+
+.front,
+.back{
+    position:absolute;
+    width:100%;
+    height:100%;
+    background:white;
+    border-radius:25px;
+    backface-visibility:hidden;
+    box-shadow:0 10px 30px rgba(0,0,0,.2);
+    padding:20px;
+}
+
+.front{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+.front img{
+    width:220px;
+    height:220px;
+    object-fit:contain;
+}
+
+.front h2{
+    margin-top:20px;
+    font-size:32px;
+}
+
+.back{
+    transform:rotateY(180deg);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+}
+
+.back h2{
+    color:#2196f3;
+}
+
+.back p{
+    margin-top:15px;
+    line-height:1.8;
+    font-size:18px;
+}
+
+.buttons{
+    margin-top:20px;
+}
+
+button{
+    border:none;
+    padding:12px 18px;
+    margin:5px;
+    border-radius:10px;
+    color:white;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+.listen{
+    background:#ff9800;
+}
+
+.repeat{
+    background:#9c27b0;
+}
+
+.next{
+    background:#4caf50;
+    margin-top:20px;
+}
+
+#result{
+    color:white;
+    font-size:18px;
+    margin-top:15px;
+    min-height:30px;
+    font-weight:600;
+}
+
+.instruction{
+    color:white;
+    margin-bottom:15px;
+}
+
+.final-screen{
+    color:white;
+}
+
+.badge{
+    font-size:24px;
+    margin-top:10px;
+}
+
+.play-again{
+    margin-top:20px;
+    background:#ff5722;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>Body Parts Learning Game</h1>
+
+<div id="score">⭐ Score: 0</div>
+
+<div class="instruction">
+Click the card to reveal information
+</div>
+
+<div class="progress">
+    <div id="bar"></div>
+</div>
+
+<div class="card" id="card">
+
+    <div class="card-inner">
+
+        <div class="front">
+
+            <img id="image" src="">
+            <h2 id="title"></h2>
+
+        </div>
+
+        <div class="back">
+
+            <h2 id="backTitle"></h2>
+
+            <p id="description"></p>
+
+            <div class="buttons">
+
+                <button class="listen"
+                onclick="speakWord(event)">
+                🔊 Listen
+                </button>
+
+                <button class="repeat"
+                onclick="repeatAfterMe(event)">
+                🎤 Repeat After Me
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<button class="next" onclick="nextCard()">
+Next Card →
+</button>
+
+<div id="result"></div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script src="percobaan.js"></script>
+
+</body>
+</html>
