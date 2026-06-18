@@ -1,40 +1,40 @@
 const flashcards = [
 
-{
-name:"Eye",
-image:"eye.png.jpg",
-description:"The eye helps us see the world around us."
-},
+    {
+        name: "Eye",
+        image: "eye.png.jpg",
+        description: "The eye helps us see the world around us."
+    },
 
-{
-name:"Ear",
-image:"ear.png.jpg",
-description:"The ear helps us hear sounds."
-},
+    {
+        name: "Ear",
+        image: "ear.png.jpg",
+        description: "The ear helps us hear sounds."
+    },
 
-{
-name:"Nose",
-image:"nose.png.jpg",
-description:"The nose helps us smell things."
-},
+    {
+        name: "Nose",
+        image: "nose.png.jpg",
+        description: "The nose helps us smell things."
+    },
 
-{
-name:"Mouth",
-image:"mouth.png.jpg",
-description:"The mouth helps us eat and speak."
-},
+    {
+        name: "Mouth",
+        image: "mouth.png.jpg",
+        description: "The mouth helps us eat and speak."
+    },
 
-{
-name:"Hand",
-image:"hand.png.jpg",
-description:"The hand helps us hold objects."
-},
+    {
+        name: "Hand",
+        image: "hand.png.jpg",
+        description: "The hand helps us hold objects."
+    },
 
-{
-name:"Foot",
-image:"foot.png.jpg",
-description:"The foot helps us walk and run."
-}
+    {
+        name: "Foot",
+        image: "foot.png.jpg",
+        description: "The foot helps us walk and run."
+    }
 
 ];
 
@@ -42,168 +42,175 @@ let current = 0;
 let score = 0;
 
 const card =
-document.getElementById("card");
+    document.getElementById("card");
 
-card.addEventListener("click",()=>{
+card.addEventListener("click", () => {
 
-card.classList.toggle("flip");
+    card.classList.toggle("flip");
 
 });
 
-function loadCard(){
+function loadCard() {
 
-document.getElementById("title").textContent =
-flashcards[current].name;
+    document.getElementById("title").textContent =
+        flashcards[current].name;
 
-document.getElementById("backTitle").textContent =
-flashcards[current].name;
+    document.getElementById("backTitle").textContent =
+        flashcards[current].name;
 
-document.getElementById("description").textContent =
-flashcards[current].description;
+    document.getElementById("description").textContent =
+        flashcards[current].description;
 
-document.getElementById("image").src =
-flashcards[current].image;
+    let img = document.getElementById("image");
 
-updateProgress();
+    img.onerror = function () {
+        img.src = "";
+    };
 
-}
+    img.src = flashcards[current].image;
 
-function updateProgress(){
-
-let percent =
-((current+1)/flashcards.length)*100;
-
-document.getElementById("bar").style.width =
-percent+"%";
+    updateProgress();
 
 }
 
-function updateScore(){
+function updateProgress() {
 
-document.getElementById("score").innerHTML =
-`⭐ Score: ${score}`;
+    let percent =
+        ((current + 1) / flashcards.length) * 100;
 
-}
-
-function speakWord(event){
-
-event.stopPropagation();
-
-speechSynthesis.cancel();
-
-let speech =
-new SpeechSynthesisUtterance(
-flashcards[current].name
-);
-
-speech.lang="en-US";
-speech.rate=0.2;
-
-speechSynthesis.speak(speech);
+    document.getElementById("bar").style.width =
+        percent + "%";
 
 }
 
-function repeatAfterMe(event){
+function updateScore() {
 
-event.stopPropagation();
-
-const SpeechRecognition =
-window.SpeechRecognition ||
-window.webkitSpeechRecognition;
-
-if(!SpeechRecognition){
-
-alert("Speech Recognition not supported.");
-return;
+    document.getElementById("score").innerHTML =
+        `⭐ Score: ${score}`;
 
 }
 
-const recognition =
-new SpeechRecognition();
+function speakWord(event) {
 
-recognition.lang="en-US";
+    event.stopPropagation();
 
-document.getElementById("result").innerHTML =
-"🎤 Listening...";
+    speechSynthesis.cancel();
 
-recognition.start();
+    let speech =
+        new SpeechSynthesisUtterance(
+            flashcards[current].name
+        );
 
-recognition.onresult = function(e){
+    speech.lang = "en-US";
+    speech.rate = 0.2;
 
-let spoken =
-e.results[0][0].transcript
-.toLowerCase()
-.trim();
-
-let answer =
-flashcards[current].name
-.toLowerCase();
-
-if(spoken.includes(answer)){
-
-score += 10;
-
-updateScore();
-
-document.getElementById("result").innerHTML =
-"✅ Correct! +10 Points";
-
-}
-else{
-
-document.getElementById("result").innerHTML =
-`❌ You said "${spoken}"`;
+    speechSynthesis.speak(speech);
 
 }
 
-};
+function repeatAfterMe(event) {
+
+    event.stopPropagation();
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+
+        document.getElementById("result").innerHTML =
+            "Speech Recognition is not supported in this browser.";
+
+        return;
+
+    }
+
+    const recognition =
+        new SpeechRecognition();
+
+    recognition.lang = "en-US";
+
+    document.getElementById("result").innerHTML =
+        "🎤 Listening...";
+
+    recognition.start();
+
+    recognition.onresult = function (e) {
+
+        let spoken =
+            e.results[0][0].transcript
+                .toLowerCase()
+                .trim();
+
+        let answer =
+            flashcards[current].name
+                .toLowerCase();
+
+        if (spoken.includes(answer)) {
+
+            score += 10;
+
+            updateScore();
+
+            document.getElementById("result").innerHTML =
+                "✅ Correct! +10 Points";
+
+        }
+        else {
+
+            document.getElementById("result").innerHTML =
+                `❌ You said "${spoken}"`;
+
+        }
+
+    };
 
 }
 
-function nextCard(){
+function nextCard() {
 
-current++;
+    card.classList.remove("flip");
 
-if(current >= flashcards.length){
+    current++;
 
-finishGame();
-return;
+    if (current >= flashcards.length) {
 
-}
+        finishGame();
+        return;
 
-card.classList.remove("flip");
+    }
 
-document.getElementById("result").innerHTML = "";
+    document.getElementById("result").innerHTML = "";
 
-loadCard();
-
-}
-
-function getBadge(){
-
-if(score >= 60){
-
-return "🏆 Expert";
-
-}
-else if(score >= 30){
-
-return "🥈 Intermediate";
-
-}
-else{
-
-return "🥉 Beginner";
+    loadCard();
 
 }
 
+function getBadge() {
+
+    if (score >= 60) {
+
+        return "🏆 Expert";
+
+    }
+    else if (score >= 30) {
+
+        return "🥈 Intermediate";
+
+    }
+    else {
+
+        return "🥉 Beginner";
+
+    }
+
 }
 
-function finishGame(){
+function finishGame() {
 
-document.querySelector(".container").innerHTML =
+    document.querySelector(".container").innerHTML =
 
-`
+        `
 <div class="final-screen">
 
 <h1>🎉 Congratulations!</h1>
@@ -230,31 +237,31 @@ Play Again
 </div>
 `;
 
-confetti({
-particleCount:300,
-spread:180,
-origin:{y:0.6}
-});
+    confetti({
+        particleCount: 300,
+        spread: 180,
+        origin: { y: 0.6 }
+    });
 
-setTimeout(()=>{
+    setTimeout(() => {
 
-confetti({
-particleCount:300,
-spread:180,
-origin:{y:0.6}
-});
+        confetti({
+            particleCount: 300,
+            spread: 180,
+            origin: { y: 0.6 }
+        });
 
-},500);
+    }, 500);
 
-setTimeout(()=>{
+    setTimeout(() => {
 
-confetti({
-particleCount:300,
-spread:180,
-origin:{y:0.6}
-});
+        confetti({
+            particleCount: 300,
+            spread: 180,
+            origin: { y: 0.6 }
+        });
 
-},1000);
+    }, 1000);
 
 }
 
